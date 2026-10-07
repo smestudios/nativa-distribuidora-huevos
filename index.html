@@ -179,6 +179,52 @@ button:disabled{opacity:.55;cursor:not-allowed}
 .nav-badge{margin-left:auto;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#268ff2;color:#fff;font-size:8px;display:grid;place-items:center;font-weight:900}.nav-badge-warn{background:#d68a14}
 @media(max-width:980px){.dashboard-actions{grid-template-columns:repeat(2,1fr)}.modern-kpis{grid-template-columns:repeat(2,1fr)}.product-mix{grid-template-columns:145px 1fr}.donut-chart{width:145px;height:145px}}
 @media(max-width:560px){.dashboard-heading{align-items:stretch;flex-direction:column}.dashboard-heading-actions{justify-content:space-between}.dashboard-actions{grid-template-columns:1fr 1fr}.modern-kpis{grid-template-columns:1fr 1fr}.modern-kpis .kpi{min-height:108px;padding:13px}.modern-kpis .kpi strong{font-size:18px}.product-mix{grid-template-columns:1fr;justify-items:center}.mix-legend{width:100%}}
+ 
+/* V3 VISUAL SYSTEM */
+:root{
+  --accent-blue:#1687e8;
+  --accent-cyan:#0fb9cf;
+  --accent-green:#17a673;
+  --accent-amber:#f0a11a;
+  --accent-purple:#7657e8;
+  --accent-rose:#e45a73;
+}
+body{background:
+  radial-gradient(circle at 84% -10%,rgba(22,135,232,.07),transparent 30%),
+  radial-gradient(circle at 0% 18%,rgba(118,87,232,.045),transparent 26%),
+  var(--bg)}
+.content{max-width:1580px}
+.topbar{box-shadow:0 4px 18px rgba(7,26,51,.025)}
+.chart-tools{display:flex;align-items:center;gap:12px}
+.chart-tools .input-inline{height:34px;font-size:9px;padding:0 9px;border-radius:9px}
+.dashboard-main-grid .chart-card{min-height:300px}
+.modern-kpis{grid-template-columns:repeat(4,1fr);gap:11px}
+.modern-kpis .kpi{min-height:112px;border-radius:16px;padding:16px 17px;box-shadow:0 12px 28px rgba(7,26,51,.09)}
+.modern-kpis .kpi:nth-child(1){background:linear-gradient(135deg,#087dd6,#17b4e5)}
+.modern-kpis .kpi:nth-child(2){background:linear-gradient(135deg,#0e986c,#21bf88)}
+.modern-kpis .kpi:nth-child(3){background:linear-gradient(135deg,#e08b0b,#f4b72b)}
+.modern-kpis .kpi:nth-child(4){background:linear-gradient(135deg,#6844d7,#8467f2)}
+.modern-kpis .kpi:nth-child(n+5){background:#fff;color:var(--ink);border:1px solid var(--line);box-shadow:var(--shadow-soft);min-height:92px}
+.modern-kpis .kpi:nth-child(n+5) .kpi-label{color:#64748b}
+.modern-kpis .kpi:nth-child(n+5) .kpi-icon{background:#f3f6fa;color:var(--accent-blue)}
+.modern-kpis .kpi:nth-child(5) .kpi-icon{background:#eaf8f3;color:var(--accent-green)}
+.modern-kpis .kpi:nth-child(6) .kpi-icon{background:#eaf4ff;color:var(--accent-blue)}
+.modern-kpis .kpi:nth-child(7) .kpi-icon{background:#fff7e7;color:var(--accent-amber)}
+.modern-kpis .kpi:nth-child(8) .kpi-icon{background:#f1edff;color:var(--accent-purple)}
+.modern-kpis .kpi:nth-child(n+5) strong{font-size:21px;margin-top:8px}
+.modern-kpis .kpi:nth-child(n+5) .kpi-foot{color:var(--muted)}
+.kpi .trend{display:inline-flex;align-items:center;gap:4px;margin-top:5px;padding:3px 6px;border-radius:999px;font-size:8px;font-weight:900}
+.kpi .trend.up{background:rgba(255,255,255,.15);color:#fff}.kpi .trend.down{background:rgba(255,255,255,.14);color:#fff}
+.kpi .trend.neutral{background:#f2f5f8;color:#738096}
+.kpi .trend.good{color:#0f855d;background:#e9faf3}.kpi .trend.bad{color:#b82d45;background:#fff0f3}
+.panel{transition:box-shadow .2s,transform .2s}.panel:hover{box-shadow:0 12px 32px rgba(7,26,51,.075)}
+.table tbody tr{transition:background .15s}.table tbody tr:hover td{background:#f7fbff}
+.badge{gap:4px}.badge:before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor;display:inline-block}
+.badge-blue:before{box-shadow:0 0 0 3px rgba(13,100,197,.08)}.badge-green:before{box-shadow:0 0 0 3px rgba(15,125,89,.08)}.badge-amber:before{box-shadow:0 0 0 3px rgba(157,104,8,.08)}.badge-red:before{box-shadow:0 0 0 3px rgba(173,41,64,.08)}
+.sync-label{padding:6px 8px;border:1px solid var(--line);border-radius:999px;background:#fff}
+@media(max-width:1180px){.modern-kpis{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.chart-tools{gap:6px}.chart-legend{display:none}}
+@media(max-width:560px){.modern-kpis{grid-template-columns:1fr 1fr}.modern-kpis .kpi{min-height:100px}.chart-tools .input-inline{height:32px}}
 </style>
 </head>
 <body>
@@ -249,8 +295,15 @@ button:disabled{opacity:.55;cursor:not-allowed}
   <div class="grid grid-2 dashboard-main-grid">
     <div class="panel chart-card">
       <div class="panel-head">
-        <div><h3>Comportamiento de ventas</h3><p>Ingresos y costo diario de los últimos 30 días</p></div>
-        <div class="chart-legend"><span><i class="legend-dot legend-blue"></i>Ingresos</span><span><i class="legend-dot legend-light"></i>Costo</span></div>
+        <div><h3>Comportamiento de ventas</h3><p id="chartSubtitle">Ingresos y costo diario de los últimos 30 días</p></div>
+        <div class="chart-tools">
+          <select id="dashboardPeriod" class="input-inline" onchange="loadDashboardInsights(this.value)">
+            <option value="7">7 días</option>
+            <option value="30" selected>30 días</option>
+            <option value="90">90 días</option>
+          </select>
+          <div class="chart-legend"><span><i class="legend-dot legend-blue"></i>Ingresos</span><span><i class="legend-dot legend-light"></i>Costo</span></div>
+        </div>
       </div>
       <div class="panel-body">
         <div id="salesChart" class="chart"></div>
@@ -369,7 +422,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
 <script>
 const state={data:null};
-const APPS_SCRIPT_URL='https://script.google.com/macros/s/AKfycbxNEWfLHcAefNtrrC2Brcevj81H633pZDATrOPUiLpqIo_n2sNXOq20W3gi0muLiQU/exec';
+
 let currentView='inicio';
 const money=n=>'$'+Number(n||0).toLocaleString('es-CO');
 const qty=n=>Number(n||0).toLocaleString('es-CO',{maximumFractionDigits:2});
@@ -394,10 +447,7 @@ function init(){
     state.data=normalizeState(d);
     renderAll();
     document.getElementById('lastSync').textContent='Actualizado '+new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
-    call('getDashboardInsights',{days:30},ins=>{
-      window.__dashboardInsights=ins||{};
-      renderDashboardInsights();
-    });
+    loadDashboardInsights(30);
   });
 }
 function refreshDashboard(){
@@ -419,22 +469,31 @@ function emptyState(title,text,icon='＋'){return `<div class="empty"><div class
 function renderDashboard(){
   const d=state.data.dashboard||{};
   const sales=state.data.ventas.slice().sort((a,b)=>new Date(b.FechaVenta)-new Date(a.FechaVenta));
-  const currentMonthSales=sales.filter(v=>String(v.FechaVenta).slice(0,7)===new Date().toISOString().slice(0,7));
-  const prev=new Date(); prev.setMonth(prev.getMonth()-1);
-  const prevKey=prev.getFullYear()+'-'+String(prev.getMonth()+1).padStart(2,'0');
+  const currentMonthKey=new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0');
+  const prevDate=new Date(); prevDate.setMonth(prevDate.getMonth()-1);
+  const prevKey=prevDate.getFullYear()+'-'+String(prevDate.getMonth()+1).padStart(2,'0');
+  const currentMonthSales=sales.filter(v=>String(v.FechaVenta).slice(0,7)===currentMonthKey);
   const previousMonthSales=sales.filter(v=>String(v.FechaVenta).slice(0,7)===prevKey);
   const currentRevenue=currentMonthSales.reduce((s,v)=>s+Number(v.PrecioVenta||0)*Number(v.Cantidad||0),0);
   const previousRevenue=previousMonthSales.reduce((s,v)=>s+Number(v.PrecioVenta||0)*Number(v.Cantidad||0),0);
   const growth=previousRevenue?((currentRevenue-previousRevenue)/previousRevenue)*100:null;
+  const activeClients=state.data.clientes.filter(x=>x.Estado==='Activo').length;
 
   const ks=[
-    ['↗','Ventas del mes',money(d.monthSales),growth===null?'Sin comparación':((growth>=0?'↑ ':'↓ ')+Math.abs(growth).toFixed(1)+'% vs. mes anterior'),'ventas'],
-    ['✦','Ganancia del mes',money(d.monthProfit),'Resultado después del costo de mercancía','ganancia'],
-    ['◫','Pedidos pendientes',qty(d.pendingOrders),'Operaciones por gestionar','pedidos'],
-    ['▤','Inventario disponible',qty(d.totalStock)+' panales',d.lowStock?.length?d.lowStock.length+' producto(s) en stock bajo':'Stock dentro del nivel configurado','inventario']
+    ['↗','Ventas del mes',money(d.monthSales),growth===null?'Sin comparación':((growth>=0?'↑ ':'↓ ')+Math.abs(growth).toFixed(1)+'% vs. mes anterior'),'ventas',growth===null?'neutral':growth>=0?'up':'down'],
+    ['✦','Ganancia del mes',money(d.monthProfit),'Rentabilidad acumulada del mes','ganancia','up'],
+    ['◫','Pedidos pendientes',qty(d.pendingOrders),'Operaciones por gestionar','pedidos','neutral'],
+    ['▤','Inventario disponible',qty(d.totalStock)+' panales',d.lowStock?.length?d.lowStock.length+' producto(s) en stock bajo':'Stock dentro del nivel configurado','inventario',d.lowStock?.length?'bad':'good'],
+    ['◎','Clientes activos',qty(activeClients),'Clientes habilitados en el sistema','clientes','good'],
+    ['◷','Unidades del mes',qty(d.monthUnits)+' panales','Volumen vendido este mes','unidades','good'],
+    ['◔','Por contactar',qty(d.dueReminders),'Recordatorios vencidos','contactar',d.dueReminders?'bad':'good'],
+    ['!','Stock bajo',qty(d.lowStock?.length||0),'Productos que requieren revisión','bajo',d.lowStock?.length?'bad':'good']
   ];
 
-  document.getElementById('kpis').innerHTML=ks.map(k=>'<div class="kpi '+k[4]+'"><div class="kpi-top"><span class="kpi-label">'+k[1]+'</span><span class="kpi-icon">'+k[0]+'</span></div><strong>'+k[2]+'</strong><div class="kpi-foot">'+k[3]+'</div></div>').join('');
+  document.getElementById('kpis').innerHTML=ks.map((k,i)=>{
+    const trend=i<4?'<span class="trend '+k[5]+'">'+(k[3].length>0&&i===0?k[3]:i===1?'Margen / utilidad':i===2?'Atención':i===3?(d.lowStock?.length?'Revisar ahora':'Nivel normal'):'')+'</span>':'';
+    return '<div class="kpi '+k[4]+'"><div class="kpi-top"><span class="kpi-label">'+k[1]+'</span><span class="kpi-icon">'+k[0]+'</span></div><strong>'+k[2]+'</strong><div class="kpi-foot">'+(i===0||i===1||i===2||i===3?'':k[3])+'</div>'+trend+'</div>';
+  }).join('');
 
   document.getElementById('pendingBadge').textContent=d.pendingOrders||0;
   document.getElementById('stockBadge').textContent=d.lowStock?.length||0;
@@ -445,13 +504,19 @@ function renderDashboard(){
   if(d.pendingOrders)alerts+='<div class="alert"><div class="alert-main"><span class="alert-icon blue">◫</span><div><b>'+d.pendingOrders+' pedido(s)</b><small>Esperan entrega</small></div></div><button class="btn btn-soft btn-sm" onclick="showView(\'pedidos\')">Ver</button></div>';
   document.getElementById('alerts').innerHTML=alerts||emptyState('Todo está en orden','No hay alertas importantes en este momento.','✓');
 
-  const recent=sales.slice(0,6);
-  document.getElementById('recentSales').innerHTML=recent.length?recent.map(v=>'<div class="activity"><div class="activity-left"><div class="activity-icon">$</div><div><b>'+esc(v.ClienteNombre)+'</b><small>'+esc(v.ProductoNombre)+' · '+qty(v.Cantidad)+' panales · '+shortDate(v.FechaVenta)+'</small></div></div><div class="activity-right"><strong>'+money(v.PrecioVenta*v.Cantidad)+'</strong><small class="muted">Ganancia '+money(v.GananciaTotal)+'</small></div></div>').join(''):emptyState('Todavía no hay ventas','Cuando registres una venta aparecerá aquí.','$');
+  document.getElementById('recentSales').innerHTML=sales.slice(0,6).length?sales.slice(0,6).map(v=>'<div class="activity"><div class="activity-left"><div class="activity-icon">$</div><div><b>'+esc(v.ClienteNombre)+'</b><small>'+esc(v.ProductoNombre)+' · '+qty(v.Cantidad)+' panales · '+shortDate(v.FechaVenta)+'</small></div></div><div class="activity-right"><strong>'+money(v.PrecioVenta*v.Cantidad)+'</strong><small class="muted">Ganancia '+money(v.GananciaTotal)+'</small></div></div>').join(''):emptyState('Todavía no hay ventas','Cuando registres una venta aparecerá aquí.','$');
 
-  renderMiniChart(recent);
   renderStockSummary('stockSummary');
 }
 
+function loadDashboardInsights(days){
+  const n=Number(days||30);
+  document.getElementById('chartSubtitle').textContent='Ingresos y costo diario de los últimos '+n+' días';
+  call('getDashboardInsights',{days:n},ins=>{
+    window.__dashboardInsights=ins||{};
+    renderDashboardInsights();
+  });
+}
 function renderDashboardInsights(){
   const ins=window.__dashboardInsights||{};
   const series=ins.series||[];
@@ -460,7 +525,7 @@ function renderDashboardInsights(){
   const products=ins.productMix||[];
   const total=products.reduce((s,p)=>s+Number(p.unidades||0),0);
   document.getElementById('mixTotal').textContent=qty(total);
-  const palette=['#1677e8','#42a5ff','#6b7ff0','#16a9e8','#8cc9f7','#b7d5f2'];
+  const palette=['#1677e8','#17a673','#f0a11a','#7657e8','#e45a73','#16a9e8','#008c95','#b06af3'];
   let cursor=0;
   const stops=products.slice(0,6).map((p,i)=>{
     const pct=total?(Number(p.unidades||0)/total)*100:0;
@@ -473,6 +538,7 @@ function renderDashboardInsights(){
   const rp=ins.recentProducts||[];
   document.getElementById('recentProducts').innerHTML=rp.length?rp.slice(0,6).map(p=>'<div class="activity"><div class="activity-left"><div class="activity-icon">◈</div><div><b>'+esc(p.Nombre)+'</b><small>'+esc(p.Estado||'Activo')+' · Creado '+shortDate(p.FechaCreacion)+'</small></div></div><div class="activity-right"><strong>'+money(p.PrecioVenta)+'</strong><small class="muted">Precio venta</small></div></div>').join(''):emptyState('Sin productos','Crea tu primer producto desde Catálogo.','◈');
 }
+
 function renderMiniChart(sales){
   renderMiniChartFromSeries((sales||[]).map(v=>({
     fecha:v.FechaVenta,
