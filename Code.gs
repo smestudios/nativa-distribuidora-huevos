@@ -1,6 +1,6 @@
 const APP = {
   name: 'Nativa',
-  version: '1.3.0',
+  version: '1.4.0',
   lowStockDefault: 10,
   sheets: {
     CONFIG: ['Clave','Valor'],
