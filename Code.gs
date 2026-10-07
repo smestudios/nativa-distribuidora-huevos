@@ -594,6 +594,54 @@ function getReports(filters) {
 }
 
 // ==============================
+// ANALÍTICA DEL DASHBOARD
+// ==============================
+function getDashboardSeries(options) {
+  const days = Math.max(7, Math.min(90, num_(options && options.days) || 30));
+  const now = new Date();
+  const start = new Date(now);
+  start.setHours(0, 0, 0, 0);
+  start.setDate(start.getDate() - (days - 1));
+
+  const sales = readSheet_(getSpreadsheet_().getSheetByName('VENTAS'));
+  const map = {};
+
+  for (let i = 0; i < days; i++) {
+    const d = new Date(start);
+    d.setDate(start.getDate() + i);
+    const key = formatDateOnly_(d);
+    map[key] = {fecha:key, ingresos:0, costos:0, ganancia:0, unidades:0};
+  }
+
+  sales.forEach(v => {
+    const key = formatDateOnly_(v.FechaVenta);
+    if (!map[key]) return;
+    const qty = num_(v.Cantidad);
+    const ingreso = num_(v.PrecioVenta) * qty;
+    const costo = num_(v.PrecioCompra) * qty;
+    map[key].ingresos += ingreso;
+    map[key].costos += costo;
+    map[key].ganancia += num_(v.GananciaTotal);
+    map[key].unidades += qty;
+  });
+
+  return Object.values(map);
+}
+
+function getAppInfo() {
+  const ss = getSpreadsheet_();
+  return {
+    ok: true,
+    name: APP.name,
+    version: APP.version,
+    timezone: Session.getScriptTimeZone(),
+    spreadsheetId: ss.getId(),
+    spreadsheetUrl: ss.getUrl(),
+    timestamp: new Date().toISOString()
+  };
+}
+
+// ==============================
 // ESTADO PRINCIPAL
 // ==============================
 function buildState_() {
