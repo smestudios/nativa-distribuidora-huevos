@@ -146,6 +146,39 @@ button:disabled{opacity:.55;cursor:not-allowed}
 @media(max-width:1180px){.kpis{grid-template-columns:repeat(2,1fr)}.dashboard-top{grid-template-columns:1fr}.warehouse-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:860px){.sidebar{left:-268px;transition:.25s}.sidebar.open{left:0}.main{margin-left:0;width:100%}.menu-btn{display:grid;place-items:center}.topbar{padding:0 15px}.top-search{display:none}.content{padding:16px 13px 94px}.topbar{height:64px}.grid-2,.grid-3{grid-template-columns:1fr}.form-grid-3{grid-template-columns:1fr}.stat-grid{grid-template-columns:repeat(2,1fr)}.warehouse-grid{grid-template-columns:1fr}.product-grid{grid-template-columns:1fr}.mobile-nav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:10px;right:10px;bottom:10px;z-index:50;padding:6px;background:rgba(255,255,255,.92);backdrop-filter:blur(17px);border:1px solid var(--line);box-shadow:0 17px 38px rgba(7,26,51,.16);border-radius:18px}.mobile-nav button{border:0;background:transparent;color:#6f7e90;padding:6px 2px 4px;border-radius:12px;font-size:8px;font-weight:800;display:grid;gap:3px;place-items:center}.mobile-nav button.active{color:var(--blue);background:var(--blue-3)}.mobile-nav .ico{font-size:15px}.sheet{max-height:94vh}}
 @media(max-width:560px){.hero{min-height:0;padding:22px 19px}.hero h3{font-size:25px}.hero p{font-size:11px}.hero-actions{display:grid;grid-template-columns:1fr}.hero-actions .btn{width:100%}.quick-panel{padding:16px}.quick-grid{grid-template-columns:1fr 1fr}.kpis{grid-template-columns:1fr 1fr;gap:8px}.kpi{padding:13px}.kpi strong{font-size:19px}.kpi-foot{font-size:8px}.section-title{align-items:stretch;flex-direction:column}.section-title .right{width:100%}.section-title .right .btn{flex:1}.toolbar{display:grid;grid-template-columns:1fr}.search{min-width:0}.table{min-width:700px}.topbar h2{font-size:16px}.topbar p{font-size:9px}.form-grid{grid-template-columns:1fr}.form-card{padding:14px}.sheet-body{padding:14px}.sheet-actions{display:grid;grid-template-columns:1fr 1fr}.sheet-actions .btn{width:100%}}
+ 
+/* NATIVA MODERN ADMIN LAYER */
+.dashboard-heading{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:13px}
+.dashboard-heading h3{margin:8px 0 3px;font-size:27px;letter-spacing:-.04em}
+.dashboard-heading p{margin:0;color:var(--muted);font-size:11px}
+.eyebrow-light{background:var(--blue-3);color:#0d64c5;border:1px solid #d4e9fb}
+.dashboard-heading-actions{display:flex;align-items:center;gap:8px}.sync-label{font-size:9px;color:var(--muted-2)}
+.dashboard-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:13px}
+.quick-action{border:1px solid var(--line);background:#fff;border-radius:14px;padding:11px 13px;display:flex;align-items:center;gap:10px;text-align:left;box-shadow:var(--shadow-soft);transition:.2s;color:var(--ink)}
+.quick-action:hover{transform:translateY(-2px);border-color:#b7d8f6;box-shadow:0 12px 28px rgba(7,26,51,.09)}
+.quick-action>span{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--blue-3);color:var(--blue);font-size:16px;font-weight:900;flex:none}
+.quick-action.primary{background:linear-gradient(135deg,#0d65c9,#2394ef);border-color:transparent;color:#fff;box-shadow:0 12px 30px rgba(22,119,232,.2)}
+.quick-action.primary>span{background:rgba(255,255,255,.13);color:#fff}.quick-action b{display:block;font-size:10px}.quick-action small{display:block;font-size:8px;color:var(--muted);margin-top:3px}.quick-action.primary small{color:#cbe5ff}
+.modern-kpis{grid-template-columns:repeat(4,1fr);gap:10px;margin-top:0}
+.modern-kpis .kpi{position:relative;overflow:hidden;border:0;min-height:118px;color:#fff;padding:16px 18px;box-shadow:0 12px 30px rgba(7,26,51,.1)}
+.modern-kpis .kpi:after{content:"";position:absolute;width:92px;height:92px;border-radius:50%;right:-30px;bottom:-40px;background:rgba(255,255,255,.09)}
+.modern-kpis .kpi:nth-child(1){background:linear-gradient(135deg,#0877d8,#18b1e7)}
+.modern-kpis .kpi:nth-child(2){background:linear-gradient(135deg,#1552c7,#5a78ea)}
+.modern-kpis .kpi:nth-child(3){background:linear-gradient(135deg,#1687ca,#22b2d4)}
+.modern-kpis .kpi:nth-child(4){background:linear-gradient(135deg,#17447f,#2475c9)}
+.modern-kpis .kpi .kpi-label,.modern-kpis .kpi .kpi-foot{color:rgba(255,255,255,.82)}
+.modern-kpis .kpi .kpi-icon{background:rgba(255,255,255,.14);color:#fff}
+.modern-kpis .kpi strong{font-size:25px}.modern-kpis .kpi-foot{margin-top:6px}
+.dashboard-main-grid{margin-top:14px}
+.dashboard-lower-grid{margin-top:14px}
+.product-mix-card{min-height:265px}.product-mix{display:grid;grid-template-columns:170px 1fr;gap:18px;align-items:center;min-height:190px}
+.donut-chart{width:170px;height:170px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#1677e8 0 25%,#42a5ff 25% 47%,#6b7ff0 47% 66%,#8cc9f7 66% 82%,#b7d5f2 82% 92%,#dceafb 92% 100%);position:relative;box-shadow:0 12px 35px rgba(22,119,232,.12)}
+.donut-hole{width:92px;height:92px;border-radius:50%;background:#fff;display:grid;place-items:center;align-content:center;box-shadow:inset 0 0 0 1px var(--line)}
+.donut-hole strong{font-size:21px;letter-spacing:-.04em}.donut-hole span{font-size:8px;color:var(--muted);margin-top:-2px}
+.mix-legend{display:grid;gap:10px}.mix-item{display:grid;grid-template-columns:auto 1fr auto;gap:7px;align-items:center}.mix-dot{width:9px;height:9px;border-radius:50%}.mix-item b{font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mix-item span{font-size:8px;color:var(--muted)}.mix-item strong{font-size:9px}
+.nav-badge{margin-left:auto;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#268ff2;color:#fff;font-size:8px;display:grid;place-items:center;font-weight:900}.nav-badge-warn{background:#d68a14}
+@media(max-width:980px){.dashboard-actions{grid-template-columns:repeat(2,1fr)}.modern-kpis{grid-template-columns:repeat(2,1fr)}.product-mix{grid-template-columns:145px 1fr}.donut-chart{width:145px;height:145px}}
+@media(max-width:560px){.dashboard-heading{align-items:stretch;flex-direction:column}.dashboard-heading-actions{justify-content:space-between}.dashboard-actions{grid-template-columns:1fr 1fr}.modern-kpis{grid-template-columns:1fr 1fr}.modern-kpis .kpi{min-height:108px;padding:13px}.modern-kpis .kpi strong{font-size:18px}.product-mix{grid-template-columns:1fr;justify-items:center}.mix-legend{width:100%}}
 </style>
 </head>
 <body>
@@ -159,8 +192,8 @@ button:disabled{opacity:.55;cursor:not-allowed}
     <nav id="nav" class="nav">
       <button data-view="inicio" class="active"><span class="ico">⌂</span>Resumen</button>
       <button data-view="ventas"><span class="ico">$</span>Ventas</button>
-      <button data-view="pedidos"><span class="ico">◫</span>Pedidos</button>
-      <button data-view="inventario"><span class="ico">▤</span>Inventario</button>
+      <button data-view="pedidos"><span class="ico">◫</span>Pedidos <span id="pendingBadge" class="nav-badge">0</span></button>
+      <button data-view="inventario"><span class="ico">▤</span>Inventario <span id="stockBadge" class="nav-badge nav-badge-warn">0</span></button>
       <button data-view="clientes"><span class="ico">◎</span>Clientes</button>
     </nav>
     <div class="nav-label" style="margin-top:10px">Administración</div>
@@ -170,7 +203,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
       <button data-view="reportes"><span class="ico">◔</span>Reportes</button>
       <button data-view="recordatorios"><span class="ico">◷</span>Recordatorios</button>
     </nav>
-    <div class="sidebar-footer"><strong>Nativa</strong><br>Panel administrativo · Google Sheets<br>v2.0 · Mobile first</div>
+    <div class="sidebar-footer"><strong>Nativa</strong><br>Panel administrativo · Google Sheets<br>v3.0 · Mobile first</div>
   </aside>
 
   <main class="main">
@@ -192,49 +225,75 @@ button:disabled{opacity:.55;cursor:not-allowed}
     <div class="content">
       <!-- INICIO -->
       <section id="view-inicio" class="view active">
-        <div class="dashboard-top">
-          <div class="hero">
-            <div class="hero-content">
-              <span class="eyebrow"><span class="live-dot"></span>Centro de control</span>
-              <h3>Decide rápido. Vende mejor. Controla todo Nativa.</h3>
-              <p>Una vista única para saber qué vendiste, cuánto ganaste, qué hay en bodega y qué clientes debes volver a contactar.</p>
-              <div class="hero-actions">
-                <button class="btn btn-light" onclick="openModal('venta')">＋ Registrar venta</button>
-                <button class="btn btn-light" onclick="openModal('pedido')">＋ Nuevo pedido</button>
-                <button class="btn btn-soft" onclick="openModal('entrada')">＋ Entrada de mercancía</button>
-              </div>
-            </div>
-          </div>
-          <div class="quick-panel">
-            <div class="quick-head"><div><h3>Acciones rápidas</h3><p>Las operaciones que más usas</p></div><span class="badge badge-blue">NATIVA</span></div>
-            <div class="quick-grid">
-              <button class="action-tile" onclick="openModal('cliente')"><span class="tile-icon">◎</span><b>Cliente</b><span>Agregar contacto</span></button>
-              <button class="action-tile" onclick="openModal('transferencia')"><span class="tile-icon">⇄</span><b>Transferir</b><span>Mover entre bodegas</span></button>
-              <button class="action-tile" onclick="showView('inventario')"><span class="tile-icon">▤</span><b>Ver stock</b><span>Existencias actuales</span></button>
-              <button class="action-tile" onclick="showView('reportes')"><span class="tile-icon">◔</span><b>Reportes</b><span>Analizar ganancias</span></button>
-            </div>
-          </div>
+  <div class="dashboard-heading">
+    <div>
+      <div class="eyebrow eyebrow-light"><span class="live-dot"></span>Panel operativo</div>
+      <h3>Resumen de Nativa</h3>
+      <p>Ventas, inventario, pedidos y clientes en una sola vista.</p>
+    </div>
+    <div class="dashboard-heading-actions">
+      <span id="lastSync" class="sync-label">Actualizado ahora</span>
+      <button class="btn btn-outline btn-sm" onclick="refreshDashboard()">↻ Actualizar</button>
+    </div>
+  </div>
+
+  <div class="dashboard-actions">
+    <button class="quick-action primary" onclick="openModal('venta')"><span>＋</span><div><b>Registrar venta</b><small>Crear operación</small></div></button>
+    <button class="quick-action" onclick="openModal('pedido')"><span>◫</span><div><b>Nuevo pedido</b><small>Dejar pendiente</small></div></button>
+    <button class="quick-action" onclick="openModal('entrada')"><span>＋</span><div><b>Entrada de mercancía</b><small>Actualizar stock</small></div></button>
+    <button class="quick-action" onclick="openModal('cliente')"><span>◎</span><div><b>Nuevo cliente</b><small>Agregar contacto</small></div></button>
+  </div>
+
+  <div id="kpis" class="kpis modern-kpis"></div>
+
+  <div class="grid grid-2 dashboard-main-grid">
+    <div class="panel chart-card">
+      <div class="panel-head">
+        <div><h3>Comportamiento de ventas</h3><p>Ingresos y costo diario de los últimos 30 días</p></div>
+        <div class="chart-legend"><span><i class="legend-dot legend-blue"></i>Ingresos</span><span><i class="legend-dot legend-light"></i>Costo</span></div>
+      </div>
+      <div class="panel-body">
+        <div id="salesChart" class="chart"></div>
+        <div id="chartLabels" class="bar-labels"></div>
+      </div>
+    </div>
+
+    <div class="panel product-mix-card">
+      <div class="panel-head">
+        <div><h3>Productos más vendidos</h3><p>Distribución por unidades en el período</p></div>
+      </div>
+      <div class="panel-body">
+        <div class="product-mix">
+          <div id="productMixChart" class="donut-chart"><div class="donut-hole"><strong id="mixTotal">0</strong><span>unidades</span></div></div>
+          <div id="productMixLegend" class="mix-legend"></div>
         </div>
+      </div>
+    </div>
+  </div>
 
-        <div id="kpis" class="kpis"></div>
+  <div class="grid grid-2 dashboard-lower-grid">
+    <div class="panel">
+      <div class="panel-head"><div><h3>Ventas recientes</h3><p>Las últimas operaciones registradas</p></div><button class="btn btn-ghost btn-sm" onclick="showView('ventas')">Ver todas →</button></div>
+      <div class="panel-body"><div id="recentSales" class="activity-list"></div></div>
+    </div>
 
-        <div class="grid grid-2" style="margin-top:16px">
-          <div class="panel chart-card">
-            <div class="panel-head"><div><h3>Ventas recientes</h3><p>Últimas 6 operaciones registradas</p></div><div class="chart-legend"><span><i class="legend-dot legend-blue"></i>Ingresos</span><span><i class="legend-dot legend-light"></i>Costo</span></div></div>
-            <div class="panel-body"><div id="salesChart" class="chart"></div><div id="chartLabels" class="bar-labels"></div></div>
-          </div>
-          <div class="panel">
-            <div class="panel-head"><div><h3>Alertas inteligentes</h3><p>Solo lo que necesita atención</p></div><button class="btn btn-ghost btn-sm" onclick="renderDashboard()">↻ Actualizar</button></div>
-            <div class="panel-body"><div id="alerts" class="alert-list"></div></div>
-          </div>
-        </div>
+    <div class="panel">
+      <div class="panel-head"><div><h3>Productos recientes</h3><p>Últimos productos creados o configurados</p></div><button class="btn btn-ghost btn-sm" onclick="showView('productos')">Catálogo →</button></div>
+      <div class="panel-body"><div id="recentProducts" class="activity-list"></div></div>
+    </div>
+  </div>
 
-        <div class="grid grid-2" style="margin-top:16px">
-          <div class="panel"><div class="panel-head"><div><h3>Actividad reciente</h3><p>Tu movimiento comercial</p></div><button class="btn btn-ghost btn-sm" onclick="showView('ventas')">Ver ventas</button></div><div class="panel-body"><div id="recentSales" class="activity-list"></div></div></div>
-          <div class="panel"><div class="panel-head"><div><h3>Resumen de inventario</h3><p>Existencias acumuladas</p></div><button class="btn btn-ghost btn-sm" onclick="showView('inventario')">Ver stock</button></div><div class="panel-body"><div id="stockSummary"></div></div></div>
-        </div>
-      </section>
-
+  <div class="grid grid-2" style="margin-top:16px">
+    <div class="panel">
+      <div class="panel-head"><div><h3>Alertas inteligentes</h3><p>Solo lo que necesita atención</p></div><button class="btn btn-ghost btn-sm" onclick="refreshDashboard()">↻ Actualizar</button></div>
+      <div class="panel-body"><div id="alerts" class="alert-list"></div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><div><h3>Resumen de inventario</h3><p>Existencias acumuladas por producto</p></div><button class="btn btn-ghost btn-sm" onclick="showView('inventario')">Ver stock →</button></div>
+      <div class="panel-body"><div id="stockSummary"></div></div>
+    </div>
+  </div>
+</section>
       <!-- VENTAS -->
       <section id="view-ventas" class="view">
         <div class="section-title"><div class="left"><h3>Ventas</h3><p>Cada operación conserva el precio histórico utilizado al momento de vender.</p></div><div class="right"><button class="btn btn-primary" onclick="openModal('venta')">＋ Nueva venta</button></div></div>
@@ -314,8 +373,16 @@ const APPS_SCRIPT_URL='https://script.google.com/macros/s/AKfycbxNEWfLHcAefNtrrC
 let currentView='inicio';
 const money=n=>'$'+Number(n||0).toLocaleString('es-CO');
 const qty=n=>Number(n||0).toLocaleString('es-CO',{maximumFractionDigits:2});
-const dateLabel=d=>d?new Date(d).toLocaleDateString('es-CO',{day:'2-digit',month:'short',year:'numeric'}):'—';
-const shortDate=d=>d?new Date(d).toLocaleDateString('es-CO',{day:'2-digit',month:'2-digit'}):'—';
+function parseUiDate(d){
+  if(!d) return null;
+  if(d instanceof Date) return d;
+  const s=String(d);
+  const m=s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if(m) return new Date(Number(m[1]),Number(m[2])-1,Number(m[3]));
+  return new Date(s);
+}
+const dateLabel=d=>{const x=parseUiDate(d);return x&&!isNaN(x)?x.toLocaleDateString('es-CO',{day:'2-digit',month:'short',year:'numeric'}):'—'};
+const shortDate=d=>{const x=parseUiDate(d);return x&&!isNaN(x)?x.toLocaleDateString('es-CO',{day:'2-digit',month:'2-digit'}):'—'};
 const esc=s=>String(s==null?'':s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 function toast(msg,ok=true){const t=document.getElementById('toast');t.textContent=msg;t.style.background=ok?'#071a33':'#b82d45';t.classList.add('show');clearTimeout(window.__toast);window.__toast=setTimeout(()=>t.classList.remove('show'),3200)}
 function setLoading(on){document.getElementById('loading').classList.toggle('show',on)}
@@ -326,9 +393,22 @@ function init(){
   call('getInitialData',{},d=>{
     state.data=normalizeState(d);
     renderAll();
-    call('getDashboardSeries',{days:30},series=>{
-      window.__dashboardSeries=series||[];
-      renderMiniChartFromSeries(window.__dashboardSeries);
+    document.getElementById('lastSync').textContent='Actualizado '+new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
+    call('getDashboardInsights',{days:30},ins=>{
+      window.__dashboardInsights=ins||{};
+      renderDashboardInsights();
+    });
+  });
+}
+function refreshDashboard(){
+  setLoading(true);
+  call('getInitialData',{},d=>{
+    state.data=normalizeState(d);
+    renderAll();
+    call('getDashboardInsights',{days:30},ins=>{
+      window.__dashboardInsights=ins||{};
+      renderDashboardInsights();
+      document.getElementById('lastSync').textContent='Actualizado '+new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
     });
   });
 }
@@ -336,7 +416,63 @@ function bindNav(){document.querySelectorAll('#nav button[data-view],#mobileNav 
 function showView(view){currentView=view;document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));const target=document.getElementById('view-'+view);if(target)target.classList.add('active');document.querySelectorAll('#nav button[data-view],#mobileNav button[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===view));document.getElementById('sidebar').classList.remove('open');const titles={inicio:['Resumen general','Control de ventas, inventario y clientes'],ventas:['Ventas','Operaciones registradas con precios históricos'],pedidos:['Pedidos','Seguimiento de pendientes y entregas'],inventario:['Inventario','Existencias y movimientos por bodega'],clientes:['Clientes','Relación e historial comercial'],bodegas:['Bodegas','Distribución y existencias por ubicación'],productos:['Productos y precios','Los cambios no modifican operaciones anteriores'],reportes:['Reportes','Consulta por período, cliente, producto y bodega'],recordatorios:['Recordatorios','Clientes que debes volver a contactar']};const t=titles[view]||titles.inicio;document.getElementById('pageTitle').textContent=t[0];document.getElementById('pageSub').textContent=t[1]}
 function renderAll(){renderDashboard();renderSales();renderOrders();renderInventory();renderClients();renderWarehouses();renderProducts();renderReminders();fillReportFilters()}
 function emptyState(title,text,icon='＋'){return `<div class="empty"><div class="empty-visual">${icon}</div><strong>${esc(title)}</strong><span>${esc(text)}</span></div>`}
-function renderDashboard(){const d=state.data.dashboard||{};const ks=[['$','Ventas del día',money(d.todaySales),'Ingresos registrados hoy'],['↗','Ventas del mes',money(d.monthSales),'Ingresos del mes actual'],['↗','Ganancia del mes',money(d.monthProfit),'Después del costo de mercancía'],['▤','Inventario',qty(d.totalStock)+' panales','Stock total disponible'],['◔','Pedidos pendientes',d.pendingOrders,'Por gestionar'],['◎','Por contactar',d.dueReminders,'Recordatorios vencidos'],['!','Stock bajo',d.lowStock.length,'Productos por reabastecer'],['◷','Unidades del mes',qty(d.monthUnits),'Panales vendidos']];document.getElementById('kpis').innerHTML=ks.slice(0,4).map(k=>`<div class="kpi"><div class="kpi-top"><span class="kpi-label">${k[1]}</span><span class="kpi-icon">${k[0]}</span></div><strong>${k[2]}</strong><div class="kpi-foot">${k[3]}</div></div>`).join('');let alerts='';if(d.lowStock?.length)d.lowStock.forEach(x=>alerts+=`<div class="alert"><div class="alert-main"><span class="alert-icon red">!</span><div><b>${esc(x.productoNombre)}</b><small>Quedan ${qty(x.cantidad)} panales</small></div></div><span class="badge badge-red">Stock bajo</span></div>`);if(d.dueReminders)alerts+=`<div class="alert"><div class="alert-main"><span class="alert-icon amber">◷</span><div><b>${d.dueReminders} cliente(s)</b><small>Hay recordatorios vencidos</small></div></div><button class="btn btn-soft btn-sm" onclick="showView('recordatorios')">Ver</button></div>`;if(d.pendingOrders)alerts+=`<div class="alert"><div class="alert-main"><span class="alert-icon blue">◫</span><div><b>${d.pendingOrders} pedido(s)</b><small>Esperan entrega</small></div></div><button class="btn btn-soft btn-sm" onclick="showView('pedidos')">Ver</button></div>`;document.getElementById('alerts').innerHTML=alerts||emptyState('Todo está en orden','No hay alertas importantes en este momento.','✓');const sales=state.data.ventas.slice().sort((a,b)=>new Date(b.FechaVenta)-new Date(a.FechaVenta)).slice(0,6);document.getElementById('recentSales').innerHTML=sales.length?sales.map(v=>`<div class="activity"><div class="activity-left"><div class="activity-icon">$</div><div><b>${esc(v.ClienteNombre)}</b><small>${esc(v.ProductoNombre)} · ${qty(v.Cantidad)} panales · ${shortDate(v.FechaVenta)}</small></div></div><div class="activity-right"><strong>${money(v.PrecioVenta*v.Cantidad)}</strong><small class="muted">Ganancia ${money(v.GananciaTotal)}</small></div></div>`).join(''):emptyState('Todavía no hay ventas','Cuando registres una venta aparecerá aquí.','$');renderMiniChart(sales);renderStockSummary('stockSummary')}
+function renderDashboard(){
+  const d=state.data.dashboard||{};
+  const sales=state.data.ventas.slice().sort((a,b)=>new Date(b.FechaVenta)-new Date(a.FechaVenta));
+  const currentMonthSales=sales.filter(v=>String(v.FechaVenta).slice(0,7)===new Date().toISOString().slice(0,7));
+  const prev=new Date(); prev.setMonth(prev.getMonth()-1);
+  const prevKey=prev.getFullYear()+'-'+String(prev.getMonth()+1).padStart(2,'0');
+  const previousMonthSales=sales.filter(v=>String(v.FechaVenta).slice(0,7)===prevKey);
+  const currentRevenue=currentMonthSales.reduce((s,v)=>s+Number(v.PrecioVenta||0)*Number(v.Cantidad||0),0);
+  const previousRevenue=previousMonthSales.reduce((s,v)=>s+Number(v.PrecioVenta||0)*Number(v.Cantidad||0),0);
+  const growth=previousRevenue?((currentRevenue-previousRevenue)/previousRevenue)*100:null;
+
+  const ks=[
+    ['↗','Ventas del mes',money(d.monthSales),growth===null?'Sin comparación':((growth>=0?'↑ ':'↓ ')+Math.abs(growth).toFixed(1)+'% vs. mes anterior'),'ventas'],
+    ['✦','Ganancia del mes',money(d.monthProfit),'Resultado después del costo de mercancía','ganancia'],
+    ['◫','Pedidos pendientes',qty(d.pendingOrders),'Operaciones por gestionar','pedidos'],
+    ['▤','Inventario disponible',qty(d.totalStock)+' panales',d.lowStock?.length?d.lowStock.length+' producto(s) en stock bajo':'Stock dentro del nivel configurado','inventario']
+  ];
+
+  document.getElementById('kpis').innerHTML=ks.map(k=>'<div class="kpi '+k[4]+'"><div class="kpi-top"><span class="kpi-label">'+k[1]+'</span><span class="kpi-icon">'+k[0]+'</span></div><strong>'+k[2]+'</strong><div class="kpi-foot">'+k[3]+'</div></div>').join('');
+
+  document.getElementById('pendingBadge').textContent=d.pendingOrders||0;
+  document.getElementById('stockBadge').textContent=d.lowStock?.length||0;
+
+  let alerts='';
+  if(d.lowStock?.length)d.lowStock.forEach(x=>alerts+='<div class="alert"><div class="alert-main"><span class="alert-icon red">!</span><div><b>'+esc(x.productoNombre)+'</b><small>Quedan '+qty(x.cantidad)+' panales</small></div></div><span class="badge badge-red">Stock bajo</span></div>');
+  if(d.dueReminders)alerts+='<div class="alert"><div class="alert-main"><span class="alert-icon amber">◷</span><div><b>'+d.dueReminders+' cliente(s)</b><small>Hay recordatorios vencidos</small></div></div><button class="btn btn-soft btn-sm" onclick="showView(\'recordatorios\')">Ver</button></div>';
+  if(d.pendingOrders)alerts+='<div class="alert"><div class="alert-main"><span class="alert-icon blue">◫</span><div><b>'+d.pendingOrders+' pedido(s)</b><small>Esperan entrega</small></div></div><button class="btn btn-soft btn-sm" onclick="showView(\'pedidos\')">Ver</button></div>';
+  document.getElementById('alerts').innerHTML=alerts||emptyState('Todo está en orden','No hay alertas importantes en este momento.','✓');
+
+  const recent=sales.slice(0,6);
+  document.getElementById('recentSales').innerHTML=recent.length?recent.map(v=>'<div class="activity"><div class="activity-left"><div class="activity-icon">$</div><div><b>'+esc(v.ClienteNombre)+'</b><small>'+esc(v.ProductoNombre)+' · '+qty(v.Cantidad)+' panales · '+shortDate(v.FechaVenta)+'</small></div></div><div class="activity-right"><strong>'+money(v.PrecioVenta*v.Cantidad)+'</strong><small class="muted">Ganancia '+money(v.GananciaTotal)+'</small></div></div>').join(''):emptyState('Todavía no hay ventas','Cuando registres una venta aparecerá aquí.','$');
+
+  renderMiniChart(recent);
+  renderStockSummary('stockSummary');
+}
+
+function renderDashboardInsights(){
+  const ins=window.__dashboardInsights||{};
+  const series=ins.series||[];
+  if(series.length) renderMiniChartFromSeries(series);
+
+  const products=ins.productMix||[];
+  const total=products.reduce((s,p)=>s+Number(p.unidades||0),0);
+  document.getElementById('mixTotal').textContent=qty(total);
+  const palette=['#1677e8','#42a5ff','#6b7ff0','#16a9e8','#8cc9f7','#b7d5f2'];
+  let cursor=0;
+  const stops=products.slice(0,6).map((p,i)=>{
+    const pct=total?(Number(p.unidades||0)/total)*100:0;
+    const from=cursor; cursor+=pct;
+    return palette[i%palette.length]+' '+from+'% '+cursor+'%';
+  });
+  document.getElementById('productMixChart').style.background=stops.length?'conic-gradient('+stops.join(',')+')':'#eaf4ff';
+  document.getElementById('productMixLegend').innerHTML=products.length?products.slice(0,6).map((p,i)=>'<div class="mix-item"><i class="mix-dot" style="background:'+palette[i%palette.length]+'"></i><b>'+esc(p.nombre)+'</b><span>'+qty(p.unidades)+' u.</span><strong>'+Math.round((Number(p.unidades||0)/Math.max(total,1))*100)+'%</strong></div>').join(''):emptyState('Sin ventas','Cuando registres ventas aparecerá el mix de productos.','◈');
+
+  const rp=ins.recentProducts||[];
+  document.getElementById('recentProducts').innerHTML=rp.length?rp.slice(0,6).map(p=>'<div class="activity"><div class="activity-left"><div class="activity-icon">◈</div><div><b>'+esc(p.Nombre)+'</b><small>'+esc(p.Estado||'Activo')+' · Creado '+shortDate(p.FechaCreacion)+'</small></div></div><div class="activity-right"><strong>'+money(p.PrecioVenta)+'</strong><small class="muted">Precio venta</small></div></div>').join(''):emptyState('Sin productos','Crea tu primer producto desde Catálogo.','◈');
+}
 function renderMiniChart(sales){
   renderMiniChartFromSeries((sales||[]).map(v=>({
     fecha:v.FechaVenta,
@@ -378,7 +514,11 @@ function globalSearch(e){if(e.key!=='Enter')return;const q=(e.target.value||'').
 
 function getById(collection,id){return state.data[collection].find(x=>String(x.ID)===String(id))}
 function val(id){const e=document.getElementById(id);return e?e.value:''}
-function today(){return new Date().toISOString().slice(0,10)}
+function today(){
+  const d=new Date();
+  const p=n=>String(n).padStart(2,'0');
+  return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate());
+}
 function openModal(type,d={}){const titles={venta:'Registrar venta',pedido:'Nuevo pedido',entrada:'Entrada de mercancía',transferencia:'Transferir inventario',cliente:d?.ID?'Editar cliente':'Nuevo cliente',bodega:d?.ID?'Editar bodega':'Nueva bodega',producto:d?.ID?'Editar producto y precios':'Nuevo producto'};document.getElementById('modalTitle').textContent=titles[type]||'Formulario';document.getElementById('modalBody').innerHTML=formFor(type,d);document.getElementById('modal').classList.add('open');wireForm(type,d)}
 function openCustom(title,html){document.getElementById('modalTitle').textContent=title;document.getElementById('modalBody').innerHTML=html;document.getElementById('modal').classList.add('open')}
 function closeModal(){document.getElementById('modal').classList.remove('open')}
