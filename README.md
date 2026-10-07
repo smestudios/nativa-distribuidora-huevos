@@ -55,7 +55,7 @@ El frontend no depende de datos ficticios para estos bloques.
 
 ## Backend
 
-Versión actual: **1.3.0**.
+Versión actual: **1.4.0**.
 
 Funciones destacadas:
 
