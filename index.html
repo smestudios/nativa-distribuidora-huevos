@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#071a33">
+<meta name="theme-color" content="#0b5ed7">
+<meta name="color-scheme" content="light">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Nativa · Distribuidora de Huevos</title>
@@ -320,13 +321,45 @@ function toast(msg,ok=true){const t=document.getElementById('toast');t.textConte
 function setLoading(on){document.getElementById('loading').classList.toggle('show',on)}
 function normalizeState(d){const empty={productos:[],clientes:[],bodegas:[],pedidos:[],ventas:[],movimientos:[],recordatorios:[],historialPrecios:[],inventario:[],dashboard:{todaySales:0,monthSales:0,todayProfit:0,monthProfit:0,todayUnits:0,monthUnits:0,totalStock:0,pendingOrders:0,dueReminders:0,lowStock:[]},meta:{name:'Nativa',version:'2.0.0'}};d=d||{};return {...empty,...d,dashboard:{...empty.dashboard,...(d.dashboard||{})}}}
 function call(fn,args,cb){if(!window.google||!google.script||!google.script.run){toast('Abre Nativa desde la implementación web de Apps Script.',false);return}setLoading(true);google.script.run.withSuccessHandler(d=>{setLoading(false);cb&&cb(d)}).withFailureHandler(e=>{setLoading(false);toast((e&&e.message)?e.message:String(e),false)})[fn](args||{})}
-function init(){bindNav();call('getInitialData',{},d=>{state.data=normalizeState(d);renderAll()})}
+function init(){
+  bindNav();
+  call('getInitialData',{},d=>{
+    state.data=normalizeState(d);
+    renderAll();
+    call('getDashboardSeries',{days:30},series=>{
+      window.__dashboardSeries=series||[];
+      renderMiniChartFromSeries(window.__dashboardSeries);
+    });
+  });
+}
 function bindNav(){document.querySelectorAll('#nav button[data-view],#mobileNav button[data-view]').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));document.getElementById('menuBtn').onclick=()=>document.getElementById('sidebar').classList.toggle('open')}
 function showView(view){currentView=view;document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));const target=document.getElementById('view-'+view);if(target)target.classList.add('active');document.querySelectorAll('#nav button[data-view],#mobileNav button[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===view));document.getElementById('sidebar').classList.remove('open');const titles={inicio:['Resumen general','Control de ventas, inventario y clientes'],ventas:['Ventas','Operaciones registradas con precios históricos'],pedidos:['Pedidos','Seguimiento de pendientes y entregas'],inventario:['Inventario','Existencias y movimientos por bodega'],clientes:['Clientes','Relación e historial comercial'],bodegas:['Bodegas','Distribución y existencias por ubicación'],productos:['Productos y precios','Los cambios no modifican operaciones anteriores'],reportes:['Reportes','Consulta por período, cliente, producto y bodega'],recordatorios:['Recordatorios','Clientes que debes volver a contactar']};const t=titles[view]||titles.inicio;document.getElementById('pageTitle').textContent=t[0];document.getElementById('pageSub').textContent=t[1]}
 function renderAll(){renderDashboard();renderSales();renderOrders();renderInventory();renderClients();renderWarehouses();renderProducts();renderReminders();fillReportFilters()}
 function emptyState(title,text,icon='＋'){return `<div class="empty"><div class="empty-visual">${icon}</div><strong>${esc(title)}</strong><span>${esc(text)}</span></div>`}
 function renderDashboard(){const d=state.data.dashboard||{};const ks=[['$','Ventas del día',money(d.todaySales),'Ingresos registrados hoy'],['↗','Ventas del mes',money(d.monthSales),'Ingresos del mes actual'],['↗','Ganancia del mes',money(d.monthProfit),'Después del costo de mercancía'],['▤','Inventario',qty(d.totalStock)+' panales','Stock total disponible'],['◔','Pedidos pendientes',d.pendingOrders,'Por gestionar'],['◎','Por contactar',d.dueReminders,'Recordatorios vencidos'],['!','Stock bajo',d.lowStock.length,'Productos por reabastecer'],['◷','Unidades del mes',qty(d.monthUnits),'Panales vendidos']];document.getElementById('kpis').innerHTML=ks.slice(0,4).map(k=>`<div class="kpi"><div class="kpi-top"><span class="kpi-label">${k[1]}</span><span class="kpi-icon">${k[0]}</span></div><strong>${k[2]}</strong><div class="kpi-foot">${k[3]}</div></div>`).join('');let alerts='';if(d.lowStock?.length)d.lowStock.forEach(x=>alerts+=`<div class="alert"><div class="alert-main"><span class="alert-icon red">!</span><div><b>${esc(x.productoNombre)}</b><small>Quedan ${qty(x.cantidad)} panales</small></div></div><span class="badge badge-red">Stock bajo</span></div>`);if(d.dueReminders)alerts+=`<div class="alert"><div class="alert-main"><span class="alert-icon amber">◷</span><div><b>${d.dueReminders} cliente(s)</b><small>Hay recordatorios vencidos</small></div></div><button class="btn btn-soft btn-sm" onclick="showView('recordatorios')">Ver</button></div>`;if(d.pendingOrders)alerts+=`<div class="alert"><div class="alert-main"><span class="alert-icon blue">◫</span><div><b>${d.pendingOrders} pedido(s)</b><small>Esperan entrega</small></div></div><button class="btn btn-soft btn-sm" onclick="showView('pedidos')">Ver</button></div>`;document.getElementById('alerts').innerHTML=alerts||emptyState('Todo está en orden','No hay alertas importantes en este momento.','✓');const sales=state.data.ventas.slice().sort((a,b)=>new Date(b.FechaVenta)-new Date(a.FechaVenta)).slice(0,6);document.getElementById('recentSales').innerHTML=sales.length?sales.map(v=>`<div class="activity"><div class="activity-left"><div class="activity-icon">$</div><div><b>${esc(v.ClienteNombre)}</b><small>${esc(v.ProductoNombre)} · ${qty(v.Cantidad)} panales · ${shortDate(v.FechaVenta)}</small></div></div><div class="activity-right"><strong>${money(v.PrecioVenta*v.Cantidad)}</strong><small class="muted">Ganancia ${money(v.GananciaTotal)}</small></div></div>`).join(''):emptyState('Todavía no hay ventas','Cuando registres una venta aparecerá aquí.','$');renderMiniChart(sales);renderStockSummary('stockSummary')}
-function renderMiniChart(sales){const host=document.getElementById('salesChart'),labels=document.getElementById('chartLabels');if(!sales.length){host.innerHTML='<div style="width:100%;display:grid;place-items:center;color:#95a2b3;font-size:10px">Aún no hay datos para graficar.</div>';labels.innerHTML='';return}const max=Math.max(...sales.map(v=>Number(v.PrecioVenta||0)*Number(v.Cantidad||0)),...sales.map(v=>Number(v.PrecioCompra||0)*Number(v.Cantidad||0)),1);host.innerHTML='<div class="chart-grid"><span></span><span></span><span></span><span></span></div>'+sales.slice().reverse().map(v=>{const rev=Number(v.PrecioVenta||0)*Number(v.Cantidad||0),cost=Number(v.PrecioCompra||0)*Number(v.Cantidad||0);return `<div class="bar-col"><div class="bar alt" style="height:${Math.max(4,(cost/max)*100)}%"></div><div class="bar" style="height:${Math.max(5,(rev/max)*100)}%"></div></div>`}).join('');labels.innerHTML=sales.slice().reverse().map(v=>`<span>${shortDate(v.FechaVenta)}</span>`).join('')}
+function renderMiniChart(sales){
+  renderMiniChartFromSeries((sales||[]).map(v=>({
+    fecha:v.FechaVenta,
+    ingresos:Number(v.PrecioVenta||0)*Number(v.Cantidad||0),
+    costos:Number(v.PrecioCompra||0)*Number(v.Cantidad||0)
+  })));
+}
+function renderMiniChartFromSeries(series){
+  const host=document.getElementById('salesChart'),labels=document.getElementById('chartLabels');
+  if(!series||!series.length){
+    host.innerHTML='<div style="width:100%;display:grid;place-items:center;color:#95a2b3;font-size:10px">Aún no hay datos para graficar.</div>';
+    labels.innerHTML='';
+    return;
+  }
+  const rows=series.slice(-12);
+  const max=Math.max(...rows.map(v=>Number(v.ingresos||0)),...rows.map(v=>Number(v.costos||0)),1);
+  host.innerHTML='<div class="chart-grid"><span></span><span></span><span></span><span></span></div>'+
+    rows.map(v=>{
+      const rev=Number(v.ingresos||0),cost=Number(v.costos||0);
+      return '<div class="bar-col"><div class="bar alt" style="height:'+Math.max(4,(cost/max)*100)+'%"></div><div class="bar" style="height:'+Math.max(5,(rev/max)*100)+'%"></div></div>';
+    }).join('');
+  labels.innerHTML=rows.map(v=>'<span>'+shortDate(v.fecha)+'</span>').join('');
+}
 function renderSales(){const body=document.getElementById('salesTable');const q=(document.getElementById('salesSearch')?.value||'').toLowerCase();const day=document.getElementById('salesDate')?.value||'';let rows=state.data.ventas.slice().reverse().filter(v=>!day||String(v.FechaVenta).slice(0,10)===day).filter(v=>[v.ClienteNombre,v.ProductoNombre,v.BodegaNombre].join(' ').toLowerCase().includes(q));body.innerHTML=rows.length?rows.map(v=>`<tr><td>${dateLabel(v.FechaVenta)}</td><td><b>${esc(v.ClienteNombre)}</b></td><td>${esc(v.ProductoNombre)}</td><td>${qty(v.Cantidad)}</td><td class="money">${money(v.PrecioVenta)}</td><td>${money(v.PrecioCompra)}</td><td class="money">${money(v.GananciaTotal)}</td><td>${esc(v.BodegaNombre)}</td></tr>`).join(''):`<tr><td colspan="8">${emptyState('Sin resultados','No hay ventas que coincidan con los filtros.','$')}</td></tr>`}
 function renderOrders(){const body=document.getElementById('ordersTable');const q=(document.getElementById('ordersSearch')?.value||'').toLowerCase();const rows=state.data.pedidos.slice().reverse().filter(v=>[v.ID,v.ClienteNombre,v.ProductoNombre].join(' ').toLowerCase().includes(q));body.innerHTML=rows.length?rows.map(v=>`<tr><td>${dateLabel(v.Fecha)}</td><td><b>${esc(v.ClienteNombre)}</b></td><td>${esc(v.ProductoNombre)}</td><td>${qty(v.Cantidad)}</td><td class="money">${money(v.PrecioVenta)}</td><td>${esc(v.BodegaNombre)}</td><td>${statusBadge(v.Estado)}</td><td>${v.Estado==='Pendiente'?`<button class="btn btn-primary btn-sm" onclick="deliverOrder('${v.ID}')">Entregar</button> <button class="btn btn-danger btn-sm" onclick="cancelOrder('${v.ID}')">Cancelar</button>`:'—'}</td></tr>`).join(''):`<tr><td colspan="8">${emptyState('Sin pedidos','Cuando registres un pedido aparecerá aquí.','◫')}</td></tr>`}
 function statusBadge(s){const cls=s==='Entregado'?'badge-green':s==='Cancelado'?'badge-red':'badge-amber';return `<span class="badge ${cls}">${esc(s)}</span>`}
