@@ -1,6 +1,6 @@
 const APP = {
   name: 'Nativa',
-  version: '1.2.0',
+  version: '1.3.0',
   lowStockDefault: 10,
   sheets: {
     CONFIG: ['Clave','Valor'],
@@ -638,6 +638,59 @@ function getAppInfo() {
     spreadsheetId: ss.getId(),
     spreadsheetUrl: ss.getUrl(),
     timestamp: new Date().toISOString()
+  };
+}
+
+// ==============================
+// INSIGHTS DEL DASHBOARD
+// ==============================
+function getDashboardInsights(options) {
+  const days = Math.max(7, Math.min(90, num_(options && options.days) || 30));
+  const state = buildState_();
+  const start = new Date();
+  start.setHours(0, 0, 0, 0);
+  start.setDate(start.getDate() - (days - 1));
+
+  const sales = state.ventas.filter(v => {
+    const d = new Date(v.FechaVenta);
+    return !isNaN(d.getTime()) && d >= start;
+  });
+
+  const productMap = {};
+  sales.forEach(v => {
+    const id = v.ProductoID || 'SIN_ID';
+    if (!productMap[id]) productMap[id] = {
+      id:id,
+      nombre:v.ProductoNombre || 'Sin producto',
+      unidades:0,
+      ingresos:0
+    };
+    const qty = num_(v.Cantidad);
+    productMap[id].unidades += qty;
+    productMap[id].ingresos += num_(v.PrecioVenta) * qty;
+  });
+
+  const productMix = Object.values(productMap)
+    .sort((a,b) => b.unidades - a.unidades)
+    .slice(0, 8);
+
+  const recentProducts = state.productos.slice()
+    .sort((a,b) => new Date(b.FechaCreacion) - new Date(a.FechaCreacion))
+    .slice(0, 8);
+
+  const recentOrders = state.pedidos.slice()
+    .sort((a,b) => new Date(b.Fecha) - new Date(a.Fecha))
+    .slice(0, 8);
+
+  const topClients = groupSales_(sales, 'ClienteID', 'ClienteNombre').slice(0, 8);
+
+  return {
+    generatedAt: new Date().toISOString(),
+    series: getDashboardSeries({days:days}),
+    productMix: productMix,
+    recentProducts: recentProducts,
+    recentOrders: recentOrders,
+    topClients: topClients
   };
 }
 
