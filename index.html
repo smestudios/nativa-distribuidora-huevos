@@ -203,7 +203,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
       <button data-view="reportes"><span class="ico">◔</span>Reportes</button>
       <button data-view="recordatorios"><span class="ico">◷</span>Recordatorios</button>
     </nav>
-    <div class="sidebar-footer"><strong>Nativa</strong><br>Panel administrativo · Google Sheets<br>v3.0 · Mobile first</div>
+    <div class="sidebar-footer"><strong>Nativa</strong><br>Panel administrativo · Google Sheets<br>v1.3 · Mobile first</div>
   </aside>
 
   <main class="main">
@@ -386,7 +386,7 @@ const shortDate=d=>{const x=parseUiDate(d);return x&&!isNaN(x)?x.toLocaleDateStr
 const esc=s=>String(s==null?'':s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 function toast(msg,ok=true){const t=document.getElementById('toast');t.textContent=msg;t.style.background=ok?'#071a33':'#b82d45';t.classList.add('show');clearTimeout(window.__toast);window.__toast=setTimeout(()=>t.classList.remove('show'),3200)}
 function setLoading(on){document.getElementById('loading').classList.toggle('show',on)}
-function normalizeState(d){const empty={productos:[],clientes:[],bodegas:[],pedidos:[],ventas:[],movimientos:[],recordatorios:[],historialPrecios:[],inventario:[],dashboard:{todaySales:0,monthSales:0,todayProfit:0,monthProfit:0,todayUnits:0,monthUnits:0,totalStock:0,pendingOrders:0,dueReminders:0,lowStock:[]},meta:{name:'Nativa',version:'2.0.0'}};d=d||{};return {...empty,...d,dashboard:{...empty.dashboard,...(d.dashboard||{})}}}
+function normalizeState(d){const empty={productos:[],clientes:[],bodegas:[],pedidos:[],ventas:[],movimientos:[],recordatorios:[],historialPrecios:[],inventario:[],dashboard:{todaySales:0,monthSales:0,todayProfit:0,monthProfit:0,todayUnits:0,monthUnits:0,totalStock:0,pendingOrders:0,dueReminders:0,lowStock:[]},meta:{name:'Nativa',version:'1.3.0'}};d=d||{};return {...empty,...d,dashboard:{...empty.dashboard,...(d.dashboard||{})}}}
 function call(fn,args,cb){if(!window.google||!google.script||!google.script.run){toast('Abre Nativa desde la implementación web de Apps Script.',false);return}setLoading(true);google.script.run.withSuccessHandler(d=>{setLoading(false);cb&&cb(d)}).withFailureHandler(e=>{setLoading(false);toast((e&&e.message)?e.message:String(e),false)})[fn](args||{})}
 function init(){
   bindNav();
