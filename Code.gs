@@ -1,6 +1,6 @@
 const APP = {
   name: 'Nativa',
-  version: '1.4.1',
+  version: '1.4.2',
   webAppUrl: 'https://script.google.com/macros/s/AKfycbxNEWfLHcAefNtrrC2Brcevj81H633pZDATrOPUiLpqIo_n2sNXOq20W3gi0muLiQU/exec',
   lowStockDefault: 10,
   sheets: {
@@ -28,6 +28,14 @@ function doGet() {
       .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
       .addMetaTag('viewport', 'width=device-width, initial-scale=1');
   } catch (err) {
+    const detail = String(err && err.message ? err.message : err);
+    const missingIndex = /(?:No HTML file named index|No se ha encontrado el archivo HTML denominado index|HTML.*index.*not found|index.*HTML.*not found)/i.test(detail);
+    const heading = missingIndex
+      ? 'No se encontró el archivo index.html dentro de este proyecto de Apps Script.'
+      : 'No se pudo cargar la interfaz de Nativa.';
+    const instructions = missingIndex
+      ? 'Abre el mismo proyecto de Apps Script, crea un archivo HTML llamado exactamente <b>index</b>, copia el contenido del archivo index.html del repositorio, guarda y publica una nueva versión.'
+      : 'Verifica los archivos del proyecto y los registros de ejecución. El detalle técnico que aparece abajo identifica el error recibido.';
     return HtmlService.createHtmlOutput(
       '<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>' +
       'body{font-family:Arial,sans-serif;background:#f5f8fc;padding:30px;color:#10233e}' +
@@ -35,9 +43,9 @@ function doGet() {
       'code{background:#eef4fb;padding:3px 6px;border-radius:6px}' +
       'h1{color:#0b2d5c}' +
       '</style></head><body><div class="box"><h1>NATIVA</h1>' +
-      '<p>La aplicación web todavía no encuentra el archivo <code>index.html</code>.</p>' +
-      '<p>En Apps Script crea un archivo <b>HTML</b> llamado exactamente <b>index</b> y pega allí el código de la interfaz de Nativa.</p>' +
-      '<p>Detalle técnico: ' + escapeHtml_(err.message || String(err)) + '</p>' +
+      '<p><b>' + heading + '</b></p>' +
+      '<p>' + instructions + '</p>' +
+      '<p>Detalle técnico: <code>' + escapeHtml_(detail) + '</code></p>' +
       '</div></body></html>'
     ).setTitle('Nativa · Configuración');
   }
@@ -394,7 +402,9 @@ function registerSaleLocked_(data) {
 
   const gainUnit = sell - buy;
   const gainTotal = gainUnit * qty;
-  const dateValue = parseDateInput_(data.fechaVenta) || new Date();
+  const dateText = data.fechaVenta == null ? '' : String(data.fechaVenta).trim();
+  const dateValue = dateText ? parseDateInput_(dateText) : new Date();
+  if (!dateValue) throw new Error('La fecha de venta no es válida.');
 
   const stock = getStockValue_(data.productoId, data.bodegaId);
   if (stock < qty) {
@@ -442,7 +452,9 @@ function createOrder(data) {
     : num_(data.precioVenta);
   const buy = num_(product.PrecioCompra);
   if (buy < 0 || sell < 0) throw new Error('Los precios de compra y venta no pueden ser negativos.');
-  const dateValue = parseDateInput_(data.fecha) || new Date();
+  const dateText = data.fecha == null ? '' : String(data.fecha).trim();
+  const dateValue = dateText ? parseDateInput_(dateText) : new Date();
+  if (!dateValue) throw new Error('La fecha del pedido no es válida.');
   if (data.estado && String(data.estado) !== 'Pendiente') {
     throw new Error('Un pedido nuevo debe crearse como Pendiente. Cambia su estado desde la lista de pedidos.');
   }
@@ -663,6 +675,29 @@ function getAppInfo() {
     spreadsheetUrl: ss.getUrl(),
     timestamp: new Date().toISOString()
   };
+}
+
+function setLowStockThreshold(data) {
+  requireFields_(data, ['threshold']);
+  const threshold = nonNegativeInteger_(data.threshold, 'El umbral de stock bajo');
+  const ss = getSpreadsheet_();
+
+  return withLock_(() => {
+    const sh = ss.getSheetByName('CONFIG') || ensureSheet_(ss, 'CONFIG', APP.sheets.CONFIG);
+    const values = sh.getDataRange().getValues();
+    let updated = false;
+
+    for (let i = 1; i < values.length; i++) {
+      if (String(values[i][0]) === 'UMBRAL_STOCK_BAJO') {
+        sh.getRange(i + 1, 2).setValues([[threshold]]);
+        updated = true;
+        break;
+      }
+    }
+
+    if (!updated) sh.appendRow(['UMBRAL_STOCK_BAJO', threshold]);
+    return buildState_();
+  });
 }
 
 // ==============================
@@ -1155,15 +1190,29 @@ function now_() {
  * Convierte fechas a yyyy-MM-dd respetando la zona horaria del proyecto.
  * También acepta fechas ya serializadas por serialize_().
  */
+function isValidCalendarDate_(year, month, day) {
+  if (![year, month, day].every(Number.isInteger)) return false;
+  if (year < 1000 || month < 1 || month > 12 || day < 1 || day > 31) return false;
+  const date = new Date(year, month - 1, day);
+  return date.getFullYear() === year &&
+    date.getMonth() === month - 1 &&
+    date.getDate() === day;
+}
+
 function formatDateOnly_(value) {
   if (value == null || value === '') return '';
   if (value instanceof Date) {
+    if (isNaN(value.getTime())) return '';
     return Utilities.formatDate(value, Session.getScriptTimeZone(), 'yyyy-MM-dd');
   }
 
   const text = String(value).trim();
-  const match = text.match(/^(\d{4}-\d{2}-\d{2})/);
-  if (match) return match[1];
+  const match = text.match(/^(\d{4})-(\d{2})-(\d{2})(?:$|[ T])/);
+  if (match) {
+    const year = Number(match[1]), month = Number(match[2]), day = Number(match[3]);
+    if (!isValidCalendarDate_(year, month, day)) return '';
+    return match[1] + '-' + match[2] + '-' + match[3];
+  }
 
   const date = new Date(text);
   if (isNaN(date.getTime())) return '';
@@ -1178,11 +1227,11 @@ function formatDateForInput_(value) {
 }
 
 /**
- * Lee fechas de formulario yyyy-MM-dd sin desplazarlas por UTC.
+ * Lee fechas de formulario y evita que JavaScript normalice días imposibles.
  * Si endOfDay es true, lleva la fecha al final del día para filtros de reporte.
  */
 function parseDateInput_(value, endOfDay) {
-  if (value == null || value === '') return null;
+  if (value == null || String(value).trim() === '') return null;
 
   if (value instanceof Date) {
     const date = new Date(value.getTime());
@@ -1192,10 +1241,14 @@ function parseDateInput_(value, endOfDay) {
   }
 
   const text = String(value).trim();
-  const match = text.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  let date;
+  const match = text.match(/^(\d{4})-(\d{2})-(\d{2})(?:$|[ T])/);
+  if (match && !isValidCalendarDate_(Number(match[1]), Number(match[2]), Number(match[3]))) {
+    return null;
+  }
 
-  if (match) {
+  let date;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(text)) {
+    if (!match) return null;
     date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
   } else {
     date = new Date(text.replace(' ', 'T'));
