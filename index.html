@@ -723,7 +723,7 @@ function cancelOrder(id){if(confirm('¿Cancelar este pedido?'))saveOrderStatus(i
 function saveOrderStatus(id,estado){call('updateOrderStatus',{id,estado},d=>{state.data=normalizeState(d);renderAll();toast(estado==='Entregado'?'Pedido entregado y venta registrada.':'Pedido cancelado.')})}
 function doneReminder(id){call('markReminderDone',{id},d=>{state.data=normalizeState(d);renderAll();toast('Recordatorio realizado. Próxima fecha calculada.')})}
 
-init();
+if (window.google?.script?.run) init();
 </script>
 </body>
 </html>
