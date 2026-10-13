@@ -569,11 +569,27 @@ function getReports(filters) {
   let sales = state.ventas.slice();
   const f = filters || {};
 
-  const start = parseDateInput_(f.start, false);
-  const end = parseDateInput_(f.end, true);
+  const startKey = f.start ? formatDateOnly_(f.start) : '';
+  const endKey = f.end ? formatDateOnly_(f.end) : '';
 
-  if (start) sales = sales.filter(v => new Date(v.FechaVenta) >= start);
-  if (end) sales = sales.filter(v => new Date(v.FechaVenta) <= end);
+  if (f.start && !startKey) throw new Error('La fecha inicial del reporte no es válida.');
+  if (f.end && !endKey) throw new Error('La fecha final del reporte no es válida.');
+  if (startKey && endKey && startKey > endKey) {
+    throw new Error('La fecha inicial no puede ser posterior a la fecha final.');
+  }
+
+  if (startKey) {
+    sales = sales.filter(v => {
+      const saleKey = formatDateOnly_(v.FechaVenta);
+      return saleKey !== '' && saleKey >= startKey;
+    });
+  }
+  if (endKey) {
+    sales = sales.filter(v => {
+      const saleKey = formatDateOnly_(v.FechaVenta);
+      return saleKey !== '' && saleKey <= endKey;
+    });
+  }
   if (f.clienteId) sales = sales.filter(v => String(v.ClienteID) === String(f.clienteId));
   if (f.productoId) sales = sales.filter(v => String(v.ProductoID) === String(f.productoId));
   if (f.bodegaId) sales = sales.filter(v => String(v.BodegaID) === String(f.bodegaId));
