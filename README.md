@@ -53,11 +53,11 @@ El frontend no depende de datos ficticios para estos bloques.
 5. Publica el proyecto como **Aplicación web**.
 6. Después de cada cambio de código, crea una nueva versión de la implementación web para que la interfaz publicada tome los cambios.
 
-**Importante:** la interfaz `index.html` utiliza `google.script.run` para comunicarse con `Code.gs`. Debe abrirse desde la URL de la implementación web de Google Apps Script; no funciona como sitio estático independiente en Vercel ni al abrir el HTML directamente. Para servirla desde otro hosting, primero habría que implementar una API HTTP compatible y adaptar el frontend.
+**Importante:** la interfaz `index.html` utiliza `google.script.run` para comunicarse con `Code.gs`. Debe ejecutarse desde la URL de la implementación web de Google Apps Script; no funciona por sí sola como sitio estático. Si se abre desde Vercel u otro hosting estático, redirige a la implementación conectada. Para alojarla como una aplicación independiente se requiere implementar una API HTTP compatible y adaptar el frontend.
 
 ## Backend
 
-Versión actual: **1.4.0**.
+Versión actual: **1.4.1**.
 
 Funciones destacadas:
 
