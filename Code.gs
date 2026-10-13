@@ -1094,6 +1094,73 @@ function now_() {
   return new Date();
 }
 
+/**
+ * Convierte fechas a yyyy-MM-dd respetando la zona horaria del proyecto.
+ * También acepta fechas ya serializadas por serialize_().
+ */
+function formatDateOnly_(value) {
+  if (value == null || value === '') return '';
+  if (value instanceof Date) {
+    return Utilities.formatDate(value, Session.getScriptTimeZone(), 'yyyy-MM-dd');
+  }
+
+  const text = String(value).trim();
+  const match = text.match(/^(\\d{4}-\\d{2}-\\d{2})/);
+  if (match) return match[1];
+
+  const date = new Date(text);
+  if (isNaN(date.getTime())) return '';
+  return Utilities.formatDate(date, Session.getScriptTimeZone(), 'yyyy-MM-dd');
+}
+
+/**
+ * Convierte una fecha de hoja o una cadena a valor compatible con input type=date.
+ */
+function formatDateForInput_(value) {
+  return formatDateOnly_(value);
+}
+
+/**
+ * Lee fechas de formulario yyyy-MM-dd sin desplazarlas por UTC.
+ * Si endOfDay es true, lleva la fecha al final del día para filtros de reporte.
+ */
+function parseDateInput_(value, endOfDay) {
+  if (value == null || value === '') return null;
+
+  if (value instanceof Date) {
+    const date = new Date(value.getTime());
+    if (isNaN(date.getTime())) return null;
+    if (endOfDay) date.setHours(23, 59, 59, 999);
+    return date;
+  }
+
+  const text = String(value).trim();
+  const match = text.match(/^(\\d{4})-(\\d{2})-(\\d{2})$/);
+  let date;
+
+  if (match) {
+    date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+  } else {
+    date = new Date(text.replace(' ', 'T'));
+  }
+
+  if (isNaN(date.getTime())) return null;
+  if (endOfDay) date.setHours(23, 59, 59, 999);
+  return date;
+}
+
+/**
+ * Escapa texto dinámico antes de insertarlo en HTML.
+ */
+function escapeHtml_(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function serialize_(v) {
   if (v instanceof Date) {
     return Utilities.formatDate(
