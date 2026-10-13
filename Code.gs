@@ -242,6 +242,7 @@ function createClient(data) {
 
 function updateClient(data) {
   requireFields_(data, ['id','nombre']);
+  const days = nonNegativeInteger_(data.diasRecordatorio || 0, 'Los días del recordatorio');
   const ss = getSpreadsheet_();
 
   return withLock_(() => {
@@ -255,7 +256,7 @@ function updateClient(data) {
         vals[i][2] = clean_(data.telefono);
         vals[i][3] = clean_(data.direccion);
         vals[i][4] = data.estado === 'Inactivo' ? 'Inactivo' : 'Activo';
-        vals[i][6] = num_(data.diasRecordatorio || 0);
+        vals[i][6] = days;
         vals[i][7] = clean_(data.observaciones);
         sh.getRange(i + 1, 1, 1, vals[i].length).setValues([vals[i]]);
         found = true;
@@ -265,7 +266,6 @@ function updateClient(data) {
 
     if (!found) throw new Error('Cliente no encontrado.');
 
-    const days = nonNegativeInteger_(data.diasRecordatorio || 0, 'Los días del recordatorio');
     if (days > 0) {
       upsertReminder_(data.id, days, 'Pendiente', data.observaciones);
     } else {
@@ -443,9 +443,10 @@ function createOrder(data) {
   const buy = num_(product.PrecioCompra);
   if (buy < 0 || sell < 0) throw new Error('Los precios de compra y venta no pueden ser negativos.');
   const dateValue = parseDateInput_(data.fecha) || new Date();
-  const status = ['Pendiente','Entregado','Cancelado'].includes(String(data.estado))
-    ? String(data.estado)
-    : 'Pendiente';
+  if (data.estado && String(data.estado) !== 'Pendiente') {
+    throw new Error('Un pedido nuevo debe crearse como Pendiente. Cambia su estado desde la lista de pedidos.');
+  }
+  const status = 'Pendiente';
 
   return withLock_(() => {
     ss.getSheetByName('PEDIDOS').appendRow([
