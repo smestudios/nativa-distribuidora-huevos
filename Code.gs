@@ -1,6 +1,7 @@
 const APP = {
   name: 'Nativa',
   version: '1.4.0',
+  webAppUrl: 'https://script.google.com/macros/s/AKfycbxNEWfLHcAefNtrrC2Brcevj81H633pZDATrOPUiLpqIo_n2sNXOq20W3gi0muLiQU/exec',
   lowStockDefault: 10,
   sheets: {
     CONFIG: ['Clave','Valor'],
@@ -634,6 +635,7 @@ function getAppInfo() {
     ok: true,
     name: APP.name,
     version: APP.version,
+    webAppUrl: APP.webAppUrl,
     timezone: Session.getScriptTimeZone(),
     spreadsheetId: ss.getId(),
     spreadsheetUrl: ss.getUrl(),
