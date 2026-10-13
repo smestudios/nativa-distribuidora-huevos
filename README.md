@@ -80,3 +80,8 @@ La interfaz toma como referencia paneles administrativos de inventario, ventas y
 ## Licencia
 
 Proyecto de trabajo de Nativa / SM Estudios.
+
+
+## URL de la implementación web
+
+**URL actual:** https://script.google.com/macros/s/AKfycbxNEWfLHcAefNtrrC2Brcevj81H633pZDATrOPUiLpqIo_n2sNXOq20W3gi0muLiQU/exec
