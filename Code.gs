@@ -832,7 +832,10 @@ function buildDashboard_(state, inventory) {
   const month = state.ventas.filter(v => formatDateOnly_(v.FechaVenta).slice(0, 7) === monthKey);
 
   const totalStock = inventory.rows.reduce((s, r) => s + Math.max(0, num_(r.cantidad)), 0);
-  const threshold = num_(getConfig_('UMBRAL_STOCK_BAJO') || APP.lowStockDefault);
+  const configuredThreshold = getConfig_('UMBRAL_STOCK_BAJO');
+  const threshold = configuredThreshold === '' || configuredThreshold == null
+    ? APP.lowStockDefault
+    : num_(configuredThreshold);
 
   const stockByProduct = {};
   inventory.rows.forEach(r => {
@@ -1168,7 +1171,8 @@ function positiveInteger_(value, label) {
 }
 
 function nonNegativeInteger_(value, label) {
-  const n = num_(value);
+  const raw = value == null ? '' : String(value).trim();
+  const n = raw === '' ? NaN : Number(raw);
   if (!Number.isFinite(n) || n < 0 || !Number.isInteger(n)) {
     throw new Error((label || 'El valor') + ' debe ser un número entero igual o mayor que cero.');
   }
