@@ -1162,7 +1162,7 @@ function formatDateOnly_(value) {
   }
 
   const text = String(value).trim();
-  const match = text.match(/^(\\d{4}-\\d{2}-\\d{2})/);
+  const match = text.match(/^(\d{4}-\d{2}-\d{2})/);
   if (match) return match[1];
 
   const date = new Date(text);
@@ -1192,7 +1192,7 @@ function parseDateInput_(value, endOfDay) {
   }
 
   const text = String(value).trim();
-  const match = text.match(/^(\\d{4})-(\\d{2})-(\\d{2})$/);
+  const match = text.match(/^(\d{4})-(\d{2})-(\d{2})$/);
   let date;
 
   if (match) {
