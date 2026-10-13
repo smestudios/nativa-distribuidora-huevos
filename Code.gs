@@ -25,7 +25,6 @@ function doGet() {
     return HtmlService.createTemplateFromFile('index')
       .evaluate()
       .setTitle('Nativa · Distribuidora de Huevos')
-      .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
       .addMetaTag('viewport', 'width=device-width, initial-scale=1');
   } catch (err) {
     const detail = String(err && err.message ? err.message : err);
