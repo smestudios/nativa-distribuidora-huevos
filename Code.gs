@@ -1,6 +1,6 @@
 const APP = {
   name: 'Nativa',
-  version: '1.4.0',
+  version: '1.4.1',
   webAppUrl: 'https://script.google.com/macros/s/AKfycbxNEWfLHcAefNtrrC2Brcevj81H633pZDATrOPUiLpqIo_n2sNXOq20W3gi0muLiQU/exec',
   lowStockDefault: 10,
   sheets: {
@@ -149,11 +149,15 @@ function createProduct(data) {
   const ss = getSpreadsheet_();
   const now = now_();
   const id = uid_('PRO');
+  const buy = num_(data.precioCompra);
+  const sell = num_(data.precioVenta);
+  if (buy < 0 || sell < 0) throw new Error('Los precios de compra y venta no pueden ser negativos.');
+
   const row = [
     id,
     clean_(data.nombre),
-    num_(data.precioCompra),
-    num_(data.precioVenta),
+    buy,
+    sell,
     data.estado === 'Inactivo' ? 'Inactivo' : 'Activo',
     now,
     now
@@ -181,6 +185,7 @@ function updateProduct(data) {
         const oldSell = num_(values[i][3]);
         const newBuy = num_(data.precioCompra);
         const newSell = num_(data.precioVenta);
+        if (newBuy < 0 || newSell < 0) throw new Error('Los precios de compra y venta no pueden ser negativos.');
         const now = now_();
 
         values[i][1] = clean_(data.nombre);
@@ -212,7 +217,7 @@ function createClient(data) {
   requireFields_(data, ['nombre']);
   const ss = getSpreadsheet_();
   const now = now_();
-  const days = num_(data.diasRecordatorio || 0);
+  const days = nonNegativeInteger_(data.diasRecordatorio || 0, 'Los días del recordatorio');
   const id = uid_('CLI');
 
   const row = [
@@ -260,7 +265,7 @@ function updateClient(data) {
 
     if (!found) throw new Error('Cliente no encontrado.');
 
-    const days = num_(data.diasRecordatorio || 0);
+    const days = nonNegativeInteger_(data.diasRecordatorio || 0, 'Los días del recordatorio');
     if (days > 0) {
       upsertReminder_(data.id, days, 'Pendiente', data.observaciones);
     } else {
@@ -321,8 +326,7 @@ function updateWarehouse(data) {
 // ==============================
 function registerEntry(data) {
   requireFields_(data, ['productoId','bodegaId','cantidad']);
-  const qty = num_(data.cantidad);
-  if (qty <= 0) throw new Error('La cantidad debe ser mayor que cero.');
+  const qty = positiveInteger_(data.cantidad, 'La cantidad');
 
   const product = findById_('PRODUCTOS', data.productoId);
   const wh = findById_('BODEGAS', data.bodegaId);
@@ -340,8 +344,7 @@ function registerTransfer(data) {
     throw new Error('La bodega de origen y destino deben ser diferentes.');
   }
 
-  const qty = num_(data.cantidad);
-  if (qty <= 0) throw new Error('La cantidad debe ser mayor que cero.');
+  const qty = positiveInteger_(data.cantidad, 'La cantidad');
 
   const product = findById_('PRODUCTOS', data.productoId);
   const origin = findById_('BODEGAS', data.origenId);
@@ -374,8 +377,7 @@ function registerSale(data) {
 function registerSaleLocked_(data) {
   requireFields_(data, ['clienteId','productoId','bodegaId','cantidad']);
 
-  const qty = num_(data.cantidad);
-  if (qty <= 0) throw new Error('La cantidad debe ser mayor que cero.');
+  const qty = positiveInteger_(data.cantidad, 'La cantidad');
 
   const ss = getSpreadsheet_();
   const product = findById_('PRODUCTOS', data.productoId);
@@ -388,6 +390,7 @@ function registerSaleLocked_(data) {
   const currentSell = num_(product.PrecioVenta);
   const buy = data.precioCompra === '' || data.precioCompra == null ? currentBuy : num_(data.precioCompra);
   const sell = data.precioVenta === '' || data.precioVenta == null ? currentSell : num_(data.precioVenta);
+  if (buy < 0 || sell < 0) throw new Error('Los precios de compra y venta no pueden ser negativos.');
 
   const gainUnit = sell - buy;
   const gainTotal = gainUnit * qty;
@@ -428,8 +431,7 @@ function registerSaleLocked_(data) {
 function createOrder(data) {
   requireFields_(data, ['clienteId','productoId','bodegaId','cantidad']);
 
-  const qty = num_(data.cantidad);
-  if (qty <= 0) throw new Error('La cantidad debe ser mayor que cero.');
+  const qty = positiveInteger_(data.cantidad, 'La cantidad');
 
   const ss = getSpreadsheet_();
   const product = findById_('PRODUCTOS', data.productoId);
@@ -439,6 +441,7 @@ function createOrder(data) {
     ? num_(product.PrecioVenta)
     : num_(data.precioVenta);
   const buy = num_(product.PrecioCompra);
+  if (buy < 0 || sell < 0) throw new Error('Los precios de compra y venta no pueden ser negativos.');
   const dateValue = parseDateInput_(data.fecha) || new Date();
   const status = ['Pendiente','Entregado','Cancelado'].includes(String(data.estado))
     ? String(data.estado)
@@ -485,6 +488,9 @@ function updateOrderStatus(data) {
         if (oldStatus === 'Entregado' && newStatus !== 'Entregado') {
           throw new Error('Un pedido entregado no puede volver automáticamente a otro estado.');
         }
+        if (oldStatus === 'Cancelado' && newStatus !== 'Cancelado') {
+          throw new Error('Un pedido cancelado no se puede reabrir ni entregar. Crea un pedido nuevo.');
+        }
 
         // Entregar = crear la venta + descontar inventario + cambiar estado.
         // Todo se ejecuta bajo el mismo LockService.
@@ -515,8 +521,7 @@ function updateOrderStatus(data) {
 // ==============================
 function saveReminder(data) {
   requireFields_(data, ['clienteId','dias']);
-  const days = num_(data.dias);
-  if (days <= 0) throw new Error('Los días del recordatorio deben ser mayores que cero.');
+  const days = positiveInteger_(data.dias, 'Los días del recordatorio');
 
   const client = findById_('CLIENTES', data.clienteId);
   return withLock_(() => {
@@ -653,9 +658,10 @@ function getDashboardInsights(options) {
   start.setHours(0, 0, 0, 0);
   start.setDate(start.getDate() - (days - 1));
 
+  const startKey = formatDateOnly_(start);
   const sales = state.ventas.filter(v => {
-    const d = new Date(v.FechaVenta);
-    return !isNaN(d.getTime()) && d >= start;
+    const saleKey = formatDateOnly_(v.FechaVenta);
+    return saleKey !== '' && saleKey >= startKey;
   });
 
   const productMap = {};
@@ -793,8 +799,8 @@ function buildDashboard_(state, inventory) {
 
   const dueReminders = state.recordatorios.filter(r => {
     if (r.Estado === 'Hecho' || !r.ProximaFecha) return false;
-    const d = new Date(r.ProximaFecha);
-    return !isNaN(d.getTime()) && d <= now;
+    const dueDate = formatDateOnly_(r.ProximaFecha);
+    return dueDate !== '' && dueDate <= todayKey;
   });
 
   return {
@@ -807,7 +813,8 @@ function buildDashboard_(state, inventory) {
     totalStock: totalStock,
     pendingOrders: state.pedidos.filter(p => p.Estado === 'Pendiente').length,
     dueReminders: dueReminders.length,
-    lowStock: lowStock
+    lowStock: lowStock,
+    lowStockThreshold: threshold
   };
 }
 
@@ -1078,12 +1085,43 @@ function clean_(v) {
 
 function num_(v) {
   if (typeof v === 'string') {
-    const normalized = v.replace(/\./g, '').replace(',', '.');
+    let normalized = v.trim().replace(/\s/g, '');
+    if (!normalized) return 0;
+
+    // Acepta datos numéricos normales y formatos locales como 1.234,56.
+    const comma = normalized.lastIndexOf(',');
+    const dot = normalized.lastIndexOf('.');
+    if (comma >= 0 && dot >= 0) {
+      if (comma > dot) {
+        normalized = normalized.replace(/\./g, '').replace(',', '.');
+      } else {
+        normalized = normalized.replace(/,/g, '');
+      }
+    } else if (comma >= 0) {
+      normalized = normalized.replace(',', '.');
+    }
+
     const n = Number(normalized);
     return isFinite(n) ? n : 0;
   }
   const n = Number(v);
   return isFinite(n) ? n : 0;
+}
+
+function positiveInteger_(value, label) {
+  const n = num_(value);
+  if (!Number.isFinite(n) || n <= 0 || !Number.isInteger(n)) {
+    throw new Error((label || 'La cantidad') + ' debe ser un número entero mayor que cero.');
+  }
+  return n;
+}
+
+function nonNegativeInteger_(value, label) {
+  const n = num_(value);
+  if (!Number.isFinite(n) || n < 0 || !Number.isInteger(n)) {
+    throw new Error((label || 'El valor') + ' debe ser un número entero igual o mayor que cero.');
+  }
+  return n;
 }
 
 function uid_(prefix) {
