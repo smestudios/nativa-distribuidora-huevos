@@ -1099,3 +1099,9 @@ function serialize_(v) {
     return Utilities.formatDate(
       v,
       Session.getScriptTimeZone(),
+      'yyyy-MM-dd HH:mm:ss'
+    );
+  }
+
+  return v;
+}
