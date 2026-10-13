@@ -44,6 +44,12 @@ La versión actual usa datos reales del backend para construir:
 
 El frontend no depende de datos ficticios para estos bloques.
 
+## Acceso y protección de datos
+
+La aplicación maneja nombres, teléfonos, direcciones, ventas e inventario. **No la uses con datos reales mientras la implementación permita acceso anónimo.** La opción \`ANYONE_ANONYMOUS\` permite que cualquier persona con el enlace, aunque no haya iniciado sesión, abra la app y realice operaciones que se ejecutan con los permisos de quien la publicó.
+
+Antes de publicarla para uso real, configura el acceso en **Implementar → Gestionar implementaciones → Editar** según quién deba usarla: \`MYSELF\` para uso exclusivo del propietario o \`DOMAIN\` si todos los usuarios pertenecen al mismo dominio de Google Workspace. \`ANYONE\` solo exige iniciar sesión con una cuenta de Google; por sí sola no crea una lista de usuarios autorizados. Si necesitas compartirla con personas específicas de cuentas distintas, hace falta una capa de autenticación/autorización adicional.
+
 ## Instalación
 
 1. Crea un proyecto de Apps Script desde Google Sheets con **Extensiones → Apps Script**, o utiliza un proyecto independiente.
@@ -57,7 +63,7 @@ El frontend no depende de datos ficticios para estos bloques.
 
 ## Backend
 
-Versión actual: **1.4.1**.
+Versión actual: **1.4.2**.
 
 Funciones destacadas:
 
