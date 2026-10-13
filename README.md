@@ -46,9 +46,11 @@ El frontend no depende de datos ficticios para estos bloques.
 
 ## Acceso y protección de datos
 
-La aplicación maneja nombres, teléfonos, direcciones, ventas e inventario. **No la uses con datos reales mientras la implementación permita acceso anónimo.** La opción \`ANYONE_ANONYMOUS\` permite que cualquier persona con el enlace, aunque no haya iniciado sesión, abra la app y realice operaciones que se ejecutan con los permisos de quien la publicó.
+La aplicación maneja nombres, teléfonos, direcciones, ventas e inventario. **No la uses con datos reales mientras la implementación permita acceso anónimo.** La configuración ANYONE_ANONYMOUS permite que cualquier persona con el enlace abra la app, incluso sin iniciar sesión. Como la aplicación se ejecuta con los permisos de quien la publicó, una persona no autorizada podría leer o modificar sus hojas de cálculo.
 
-Antes de publicarla para uso real, configura el acceso en **Implementar → Gestionar implementaciones → Editar** según quién deba usarla: \`MYSELF\` para uso exclusivo del propietario o \`DOMAIN\` si todos los usuarios pertenecen al mismo dominio de Google Workspace. \`ANYONE\` solo exige iniciar sesión con una cuenta de Google; por sí sola no crea una lista de usuarios autorizados. Si necesitas compartirla con personas específicas de cuentas distintas, hace falta una capa de autenticación/autorización adicional.
+El manifiesto del repositorio usa MYSELF como valor seguro inicial: solo la cuenta que publicó la aplicación podrá abrirla. Si necesitas compartirla, configura los permisos con cuidado en Implementar → Gestionar implementaciones → Editar. ANYONE permite entrar a cualquier cuenta de Google; DOMAIN limita el acceso a un dominio de Google Workspace, pero no selecciona usuarios concretos. El acceso para personas específicas requiere controles adicionales de autenticación y autorización.
+
+**Importante:** cambiar el manifiesto en GitHub no modifica por sí solo una implementación activa de Apps Script. Los permisos de la implementación publicada deben revisarse y actualizarse en el editor de Google Apps Script.
 
 ## Instalación
 
